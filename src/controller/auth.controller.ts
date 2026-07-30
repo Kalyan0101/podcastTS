@@ -1,10 +1,10 @@
-import { prisma } from "../config/prisma.js";
 import { UserType } from "../generated/prisma/enums.js";
 import { ApiError, ApiResponse, catchResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { comparePassword, hashPassword } from "../utils/password.helper.js";
 import jwt from "jsonwebtoken";
 import { cookiesOptions, userLogin, userRegister } from "./helper.js";
+import { prisma } from "../config/prisma.js";
 
 
 const generateRefreshAccessTokens = async (userId: string): Promise<{ accessToken: string, refreshToken: string }> => {

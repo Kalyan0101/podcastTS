@@ -3,12 +3,11 @@ CREATE TYPE "UserType" AS ENUM ('USER', 'CREATOR', 'ADMIN');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "userType" "UserType" NOT NULL DEFAULT 'USER',
-    "accessToken" TEXT,
     "refreshToken" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -22,7 +21,7 @@ CREATE TABLE "Channel" (
     "name" TEXT NOT NULL,
     "desc" TEXT,
     "coverImage" TEXT,
-    "ownerId" INTEGER NOT NULL,
+    "ownerId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -47,7 +46,7 @@ CREATE TABLE "Episode" (
 -- CreateTable
 CREATE TABLE "like" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "episodeId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -58,7 +57,7 @@ CREATE TABLE "like" (
 -- CreateTable
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "episodeId" INTEGER NOT NULL,
     "comment" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -70,7 +69,7 @@ CREATE TABLE "Comment" (
 -- CreateTable
 CREATE TABLE "Subscription" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "channelId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -81,7 +80,7 @@ CREATE TABLE "Subscription" (
 -- CreateTable
 CREATE TABLE "SavedEpisode" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "channelId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

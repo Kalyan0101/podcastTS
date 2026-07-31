@@ -31,3 +31,25 @@ export type channelCreate_payload = {
     desc?: String;
     coverImage_url?: String;
 }
+export type channelUpdate_payload = {
+    id: number;
+    name?: String;
+    desc?: String;
+    coverImage_url?: String;
+}
+
+export type episodCreate_payload = {
+    name: String;
+    desc?: String;
+    audio_url: String;
+    channelId: number;
+    duration: String
+};
+
+export type episodUpdate_payload = {
+    id: number;
+    name?: String;
+    desc?: String;
+    audio_url?: String;
+    duration?: String
+};

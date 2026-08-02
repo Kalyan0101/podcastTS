@@ -143,7 +143,7 @@ export const register = asyncHandler(async (req, res) => {
             },
         });
     
-        if (!isCreated) return res.status(500).json(new ApiError(500, "Record creation failed!!!"));
+        if (!isCreated) throw new ApiError(500, "Record creation failed!!!");
     
         return res.status(200).json(new ApiResponse(200, isCreated, "Register Successfully"));
 

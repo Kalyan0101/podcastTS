@@ -51,7 +51,7 @@ export const createChannel = asyncHandler(async (req, res) => {
         const { id: userId } = req.user;
         const { name, coverImage_url, desc }: channelCreate_payload = req.body;
 
-        if (!name) new ApiError(400, "Name must required!!!");
+        if (!name) throw new ApiError(400, "Name must required!!!");
 
         const channel = await prisma.channel.create({
             data: {
@@ -61,7 +61,7 @@ export const createChannel = asyncHandler(async (req, res) => {
                 desc: desc?.trim()
             }
         });
-        if (!channel) return res.status(501).json(new ApiError(501, "channel creation failed!!!"));
+        if (!channel) throw new ApiError(501, "channel creation failed!!!");
 
         return res.status(201).json(new ApiResponse(201, channel, "created successfully"));
 
@@ -75,7 +75,7 @@ export const updateChannelDetails = asyncHandler(async (req, res) => {
         const { id: userId } = req.user;
         const { id, name, coverImage_url, desc }: channelUpdate_payload = req.body;
 
-        if (!id) new ApiError(400, "Channel id must required!!!");
+        if (!id) throw new ApiError(400, "Channel id must required!!!");
 
         const channel = await prisma.channel.update({
             where: {
@@ -88,7 +88,7 @@ export const updateChannelDetails = asyncHandler(async (req, res) => {
                 desc: desc?.trim()
             }
         });
-        if (!channel) return res.status(501).json(new ApiError(501, "channel creation failed!!!"));
+        if (!channel) throw new ApiError(501, "channel creation failed!!!");
 
         return res.status(201).json(new ApiResponse(201, channel, "created successfully"));
 
@@ -101,12 +101,12 @@ export const deleteChannel = asyncHandler(async (req, res) => {
     try {
         const id = Number(req.params.id);
 
-        if (!id) new ApiError(400, "Channel id must required!!!");
+        if (!id) throw new ApiError(400, "Channel id must required!!!");
 
         const channel = await prisma.channel.delete({
             where: { id }
         });
-        if (!channel) return res.status(501).json(new ApiError(501, "deletion failed!!!"));
+        if (!channel) throw new ApiError(501, "deletion failed!!!");
 
         return res.status(201).json(new ApiResponse(201, channel, "record deleted"));
 

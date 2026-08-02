@@ -46,11 +46,22 @@ export const getEpisodes = asyncHandler(async (req, res) => {
 
 export const CreateEpisode = asyncHandler(async (req, res) => {
     try {
+        const { id: userId } = req.user;
         const { name, desc, audio_url, channelId, duration }: episodCreate_payload = req.body;
 
         if (
-            [name, audio_url, channelId, duration].some(a => a === "")
-        ) return res.status(400).json(new ApiError(400, "required fields are missing!!!"));
+            [name, audio_url, duration].some(a => !a?.trim())
+        ) throw new ApiError(400, "required fields are missing!!!");
+
+        const id = Number(channelId);
+        if (!Number.isInteger(id) || id < 1) throw new ApiError(400, "valid channelId must required!!!");
+
+        /** Channel must exist and belong to the caller, else the FK fails as an opaque 500 */
+        const channel = await prisma.channel.findFirst({
+            where: { id, ownerId: userId },
+            select: { id: true }
+        });
+        if (!channel) throw new ApiError(404, "Channel not found!!!");
 
         const episode = await prisma.episode.create({
             data: {
@@ -59,10 +70,10 @@ export const CreateEpisode = asyncHandler(async (req, res) => {
                 audio_url: audio_url.trim(),
                 duration: duration.trim(),
                 publishAt: new Date(),
-                channelId
+                channelId: channel.id
             }
         });
-        if (!episode) return res.status(501).json(new ApiError(501, "Record not created!!!"));
+        if (!episode) throw new ApiError(501, "Record not created!!!");
 
         return res.status(201).json(new ApiResponse(201, episode, "Record created"));
 
@@ -75,7 +86,7 @@ export const updateEpisodeDetails = asyncHandler(async (req, res) => {
     try {
         const { id, name, desc, audio_url, duration }: episodUpdate_payload = req.body;
 
-        if (!id) return res.status(400).json(new ApiError(400, "id must required!!!"));
+        if (!id) throw new ApiError(400, "id must required!!!");
 
         const episode = await prisma.episode.update({
             where: { id },
@@ -86,7 +97,7 @@ export const updateEpisodeDetails = asyncHandler(async (req, res) => {
                 duration: duration?.trim()
             }
         });
-        if (!episode) return res.status(501).json(new ApiError(501, "Record updation failed!!!"));
+        if (!episode) throw new ApiError(501, "Record updation failed!!!");
 
         return res.status(201).json(new ApiResponse(201, episode, "Record update"));
 
@@ -99,12 +110,12 @@ export const deleteEpisode = asyncHandler(async (req, res) => {
     try {
         const episopdeId = Number(req.query.episopdeId);
 
-        if (!episopdeId) return res.status(400).json(new ApiError(400, "episopdeId must required!!!"));
+        if (!episopdeId) throw new ApiError(400, "episopdeId must required!!!");
 
         const episode = await prisma.episode.delete({
             where: { id: episopdeId },
         });
-        if (!episode) return res.status(501).json(new ApiError(501, "Deletion failed!!!"));
+        if (!episode) throw new ApiError(501, "Deletion failed!!!");
 
         return res.status(201).json(new ApiResponse(201, {}, "Record deleted"));
 

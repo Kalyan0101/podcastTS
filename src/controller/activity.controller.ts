@@ -22,10 +22,9 @@ export const makeSubscription = asyncHandler(async (req, res) => {
                 channelId
             },
         });
+        if (!isSubscribe) throw new ApiError(500, "Subscribe failed!!!");
 
-        if (!isSubscribe) return res.status(500).json(new ApiError(500, "Subscribe failed!!!"));
         return res.status(201).json(new ApiResponse(201, "Subscribed"));
-
 
     } catch (error: unknown) {
         catchResponse(error, res);
@@ -39,10 +38,9 @@ export const removeSubscription = asyncHandler(async (req, res) => {
             where: { id }
         });
 
-        if (!isDelete) return res.status(500).json(new ApiError(500, "Unsubscribe failed!!!"));
+        if (!isDelete) throw new ApiError(500, "Unsubscribe failed!!!");
 
         return res.status(200).json(new ApiResponse(200, {}, "Unsubscribe"));
-
 
     } catch (error: unknown) {
         catchResponse(error, res);
@@ -55,7 +53,7 @@ export const removeSubscription = asyncHandler(async (req, res) => {
 export const addLike = asyncHandler(async (req, res) => {
     try {
         const { userId, episodeId }: addLike_payload = req.body;
-        if (!episodeId || !userId) return res.status(401).json(new ApiError(401, "both fields are required!!!"));
+        if (!episodeId || !userId) throw new ApiError(401, "both fields are required!!!");
 
         const isLike = await prisma.like.upsert({
             where: {
@@ -71,7 +69,7 @@ export const addLike = asyncHandler(async (req, res) => {
             },
         });
 
-        if (!isLike) return res.status(500).json(new ApiError(500, "Like failed!!!", isLike));
+        if (!isLike) throw new ApiError(500, "Like failed!!!", isLike);
         return res.status(201).json(new ApiResponse(201, "Like"));
 
     } catch (error: unknown) {
@@ -86,7 +84,7 @@ export const removeLike = asyncHandler(async (req, res) => {
             where: { id }
         });
 
-        if (!isDelete) return res.status(500).json(new ApiError(500, "Like failed!!!"));
+        if (!isDelete) throw new ApiError(500, "Like failed!!!");
 
         return res.status(200).json(new ApiResponse(200, {}, "Like added"));
 
@@ -102,7 +100,7 @@ export const addComment = asyncHandler(async (req, res) => {
     try {
         const { userId, episodeId, comment }: addComment_payload = req.body;
 
-        if (!episodeId || !userId || !comment) return res.status(401).json(new ApiError(401, "Requir fields are required!!!"));
+        if (!episodeId || !userId || !comment) throw new ApiError(401, "Requir fields are required!!!");
 
         const isSubscribe = await prisma.comment.upsert({
             where: {
@@ -119,9 +117,8 @@ export const addComment = asyncHandler(async (req, res) => {
             },
         });
 
-        if (!isSubscribe) return res.status(500).json(new ApiError(500, "Subscribe failed!!!", isSubscribe));
+        if (!isSubscribe) throw new ApiError(500, "Subscribe failed!!!", isSubscribe);
         return res.status(201).json(new ApiResponse(201, "Subscribed"));
-
 
     } catch (error: unknown) {
         catchResponse(error, res);
@@ -135,7 +132,7 @@ export const removeComment = asyncHandler(async (req, res) => {
             where: { id }
         });
 
-        if (!isDelete) return res.status(500).json(new ApiError(500, "Comment remove failed!!!"));
+        if (!isDelete) throw new ApiError(500, "Comment remove failed!!!");
 
         return res.status(200).json(new ApiResponse(200, {}, "Comment removed"));
 
@@ -150,7 +147,7 @@ export const removeComment = asyncHandler(async (req, res) => {
 export const episodeSave = asyncHandler(async (req, res) => {
     try {
         const { userId, episodeId }: episodeSave_payload = req.body;
-        if (!userId || !episodeId) return res.status(401).json(new ApiError(401, "both fields are required!!!"));
+        if (!userId || !episodeId) throw new ApiError(401, "both fields are required!!!");
 
         const isSubscribe = await prisma.savedEpisode.upsert({
             where: {
@@ -166,7 +163,8 @@ export const episodeSave = asyncHandler(async (req, res) => {
             },
         });
 
-        if (!isSubscribe) return res.status(500).json(new ApiError(500, "Episode save failed!!!"));
+        if (!isSubscribe) throw new ApiError(500, "Episode save failed!!!");
+
         return res.status(201).json(new ApiResponse(201, "Episode saved"));
 
     } catch (error: unknown) {
@@ -181,7 +179,7 @@ export const episodeRemove = asyncHandler(async (req, res) => {
             where: { id }
         });
 
-        if (!isDelete) return res.status(500).json(new ApiError(500, "Episode remove failed!!!"));
+        if (!isDelete) throw new ApiError(500, "Episode remove failed!!!");
 
         return res.status(200).json(new ApiResponse(200, {}, "Episode remove"));
 

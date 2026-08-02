@@ -9,10 +9,13 @@ export const currentUser = asyncHandler(async (req, res) => {
         if (!userId) throw new ApiError(401, "Unauthorised!!!");
 
         const user = await prisma.user.findUnique({
-            where: { id: userId }
+            where: { id: userId },
+            omit: {
+                password: true,
+                refreshToken: true
+            }
         })
         if (!user) throw new ApiError(401, "user data not found!!!");
-
 
         return res.status(200).json(new ApiResponse(200, user, "user data retrived succesfully"));
 
@@ -43,9 +46,7 @@ export const updateUserDetails = asyncHandler(async (req, res) => {
                 name: name?.trim()
             }
         });
-        console.log("user", user);
-
-        if(!user) new ApiError(501, "user record is not update!!!");
+        if(!user) throw new ApiError(501, "user record is not update!!!");
 
         return res.status(200).json(new ApiResponse(200, user, "record updated"));
 

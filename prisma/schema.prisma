@@ -71,6 +71,8 @@ model like {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, episodeId])
 }
 
 model Comment {
@@ -84,6 +86,8 @@ model Comment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, episodeId])
 }
 
 model Subscription {
@@ -95,6 +99,8 @@ model Subscription {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, channelId])
 }
 
 model SavedEpisode {
@@ -102,9 +108,11 @@ model SavedEpisode {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  episode   Episode @relation(fields: [channelId], references: [id])
-  channelId Int
+  episode   Episode @relation(fields: [episodeId], references: [id])
+  episodeId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, episodeId])
 }

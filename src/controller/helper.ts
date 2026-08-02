@@ -53,3 +53,24 @@ export type episodUpdate_payload = {
     audio_url?: String;
     duration?: String
 };
+
+export type makeSubscription_payload = {
+    userId: string;
+    channelId: number;
+};
+
+export type addComment_payload = {
+    userId: string;
+    episodeId: number;
+    comment: string;
+};
+
+export type addLike_payload = {
+    userId: string;
+    episodeId: number;
+};
+
+export type episodeSave_payload = {
+    userId: string;
+    episodeId: number;
+};

@@ -3,7 +3,7 @@ import { ApiError, ApiResponse, catchResponse } from "../utils/apiResponse.js"
 import { episodCreate_payload, episodUpdate_payload } from "./helper.js";
 import { prisma } from "../config/prisma.js";
 
-export const episode_read = asyncHandler(async (req, res) => {
+export const getEpisodes = asyncHandler(async (req, res) => {
     try {
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 20;
@@ -44,7 +44,7 @@ export const episode_read = asyncHandler(async (req, res) => {
     }
 });
 
-export const episode_create = asyncHandler(async (req, res) => {
+export const CreateEpisode = asyncHandler(async (req, res) => {
     try {
         const { name, desc, audio_url, channelId, duration }: episodCreate_payload = req.body;
 
@@ -71,7 +71,7 @@ export const episode_create = asyncHandler(async (req, res) => {
     }
 });
 
-export const episodeDetails_update = asyncHandler(async (req, res) => {
+export const updateEpisodeDetails = asyncHandler(async (req, res) => {
     try {
         const { id, name, desc, audio_url, duration }: episodUpdate_payload = req.body;
 
@@ -95,7 +95,7 @@ export const episodeDetails_update = asyncHandler(async (req, res) => {
     }
 });
 
-export const episode_delete = asyncHandler(async (req, res) => {
+export const deleteEpisode = asyncHandler(async (req, res) => {
     try {
         const episopdeId = Number(req.query.episopdeId);
 
